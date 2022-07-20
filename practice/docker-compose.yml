@@ -1,0 +1,26 @@
+version: "3"
+
+volumes:
+  db-data:
+    external: false
+  redis-data:
+
+services:
+  db:
+    image: mysql:8.0.25
+    platform: linux/x86_64
+    environment:
+      MYSQL_ROOT_PASSWORD: q12we34r
+      TZ: Asia/Seoul
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+  redis:
+    image: redis:6.2.4-alpine3.13
+    command: redis-server
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
