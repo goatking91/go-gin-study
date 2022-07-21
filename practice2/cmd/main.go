@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/goatking91/go-gin-study/practice2/internal/app/router"
 	"github.com/goatking91/go-gin-study/practice2/internal/logo"
 	_ "github.com/goatking91/go-gin-study/practice2/pkg/config"
 	_ "github.com/goatking91/go-gin-study/practice2/pkg/db"
@@ -19,7 +20,7 @@ func main() {
 	env := &util.Env{EnvSource: &util.EnvGetter{}}
 	gin.SetMode(env.GetString("SERVER_RUN_MODE"))
 
-	r := gin.Default()
+	r := router.InitRouter()
 
 	logger.S.Info(logo.GenerateLogo())
 
