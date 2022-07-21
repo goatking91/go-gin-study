@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/goatking91/go-gin-study/practice2/internal/logo"
 	"log"
 	"net/http"
 	"os"
@@ -17,6 +18,8 @@ func main() {
 
 	r := gin.Default()
 
+	logger.S.Info(logo.GenerateLogo())
+
 	endPoint := fmt.Sprintf(":%v", os.Getenv("SERVER_PORT"))
 	readTimeout, _ := time.ParseDuration(os.Getenv("SERVER_READ_TIMEOUT"))
 	writeTimeout, _ := time.ParseDuration(os.Getenv("SERVER_READ_TIMEOUT"))
@@ -28,7 +31,6 @@ func main() {
 		WriteTimeout: writeTimeout,
 	}
 
-	logger.S.Infof("Starting http server listening:(%s) timeout r:%v w:%v", endPoint, readTimeout, writeTimeout)
 	logger.S.Infof("Starting http server listening:(%s) timeout r:%v w:%v", endPoint, readTimeout, writeTimeout)
 
 	err := server.ListenAndServe()

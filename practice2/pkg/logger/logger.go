@@ -1,7 +1,7 @@
 package logger
 
 import (
-	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"github.com/lestrrat-go/file-rotatelogs"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"
@@ -22,6 +22,7 @@ func init() {
 	cf := zap.NewProductionEncoderConfig()
 	cf.EncodeTime = zapcore.ISO8601TimeEncoder // ISO8601-formatted (2022-05-06T17:14:21.101+0900) string with millisecond precision
 	cEncoder := zapcore.NewConsoleEncoder(cf)
+
 	var core zapcore.Core
 
 	// 로그파일에 출력할 경우 파일과 콘솔출력
