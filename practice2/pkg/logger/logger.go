@@ -17,7 +17,7 @@ var (
 	L *zap.Logger        // zap logger
 )
 
-func init() {
+func InitLogger() {
 	env := &util.Env{EnvSource: &util.EnvGetter{}}
 	logLevel := parseLevel(env.GetString("LOG_LEVEL"))
 
@@ -76,6 +76,6 @@ func parseLevel(lvl string) zapcore.Level {
 		//	return TRACE
 	}
 
-	log.Printf("not a valid log Level: %q", lvl)
+	log.Printf("not config valid log Level: %q", lvl)
 	return zapcore.InfoLevel
 }

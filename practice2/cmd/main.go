@@ -11,11 +11,19 @@ import (
 	"github.com/goatking91/go-gin-study/practice2/internal/app/router"
 	"github.com/goatking91/go-gin-study/practice2/internal/logo"
 	_ "github.com/goatking91/go-gin-study/practice2/pkg/config"
-	_ "github.com/goatking91/go-gin-study/practice2/pkg/db"
+	"github.com/goatking91/go-gin-study/practice2/pkg/db"
 	"github.com/goatking91/go-gin-study/practice2/pkg/logger"
+	"github.com/goatking91/go-gin-study/practice2/pkg/redis"
 	_ "github.com/goatking91/go-gin-study/practice2/pkg/redis"
 	"github.com/goatking91/go-gin-study/practice2/pkg/util"
 )
+
+func init() {
+	logger.InitLogger()
+	db.InitDb()
+	db.InitMigrate()
+	redis.InitRedis()
+}
 
 // @title Practice2 API
 // @version 1.0

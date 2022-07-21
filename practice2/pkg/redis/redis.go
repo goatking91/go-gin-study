@@ -15,7 +15,7 @@ var (
 	Redis *redis.Client
 )
 
-func init() {
+func InitRedis() {
 	env := &util.Env{EnvSource: &util.EnvGetter{}}
 	logger.S.Info("Connecting Redis Server ...")
 

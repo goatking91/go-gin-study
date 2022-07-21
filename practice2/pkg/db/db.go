@@ -18,7 +18,7 @@ var (
 	DB *gorm.DB
 )
 
-func init() {
+func InitDb() {
 	env := &util.Env{EnvSource: &util.EnvGetter{}}
 	logger.S.Info("Connecting Database Server ....")
 
@@ -55,7 +55,7 @@ func init() {
 	// SetMaxOpenConns sets the maximum number of open connections to the database.
 	sqlDB.SetMaxOpenConns(env.GetInt("DB_MAX_OPEN_CONNECTS"))
 
-	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
+	// SetConnMaxLifetime sets the maximum amount of time config connection may be reused.
 
 	sqlDB.SetConnMaxLifetime(env.GetDuration("DATABASE_MAX_OPEN_CONNECTS"))
 
