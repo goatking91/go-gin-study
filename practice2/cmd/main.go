@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/goatking91/go-gin-study/practice2/docs"
 	"github.com/goatking91/go-gin-study/practice2/internal/app/router"
 	"github.com/goatking91/go-gin-study/practice2/internal/logo"
 	_ "github.com/goatking91/go-gin-study/practice2/pkg/config"
@@ -16,9 +17,16 @@ import (
 	"github.com/goatking91/go-gin-study/practice2/pkg/util"
 )
 
+// @title Practice2 API
+// @version 1.0
 func main() {
 	env := &util.Env{EnvSource: &util.EnvGetter{}}
 	gin.SetMode(env.GetString("SERVER_RUN_MODE"))
+
+	docs.SwaggerInfo.Description = env.GetString("SWAGGER_DESCRIPTION")
+	docs.SwaggerInfo.Host = env.GetString("SWAGGER_HOST")
+	docs.SwaggerInfo.BasePath = env.GetString("SWAGGER_BASE_PATH")
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	r := router.InitRouter()
 

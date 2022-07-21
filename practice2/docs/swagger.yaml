@@ -1,0 +1,33 @@
+definitions:
+  controller.pong:
+    properties:
+      datetime:
+        type: string
+      hostname:
+        type: string
+      message:
+        type: string
+      uri:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Practice2 API
+  version: "1.0"
+paths:
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: 헬스체크를 위한 ping입니다.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.pong'
+      summary: ping
+      tags:
+      - ""
+swagger: "2.0"
