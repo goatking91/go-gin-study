@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/goatking91/go-gin-study/practice2/pkg/config"
+	"github.com/goatking91/go-gin-study/practice2/pkg/logger"
 )
 
 func main() {
@@ -27,7 +28,8 @@ func main() {
 		WriteTimeout: writeTimeout,
 	}
 
-	log.Printf("Starting http server listening:(%s) timeout r:%v w:%v", endPoint, readTimeout, writeTimeout)
+	logger.S.Infof("Starting http server listening:(%s) timeout r:%v w:%v", endPoint, readTimeout, writeTimeout)
+	logger.S.Infof("Starting http server listening:(%s) timeout r:%v w:%v", endPoint, readTimeout, writeTimeout)
 
 	err := server.ListenAndServe()
 	if err != nil {
