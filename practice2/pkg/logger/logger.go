@@ -6,9 +6,10 @@ import (
 	"go.uber.org/zap/zapcore"
 	"log"
 	"os"
-	"strconv"
 	"strings"
 	"time"
+
+	"github.com/goatking91/go-gin-study/practice2/pkg/util"
 )
 
 var (
@@ -17,7 +18,8 @@ var (
 )
 
 func init() {
-	logLevel := parseLevel(os.Getenv("LOG_LEVEL"))
+	env := &util.Env{EnvSource: &util.EnvGetter{}}
+	logLevel := parseLevel(env.GetString("LOG_LEVEL"))
 
 	cf := zap.NewProductionEncoderConfig()
 	cf.EncodeTime = zapcore.ISO8601TimeEncoder // ISO8601-formatted (2022-05-06T17:14:21.101+0900) string with millisecond precision
@@ -26,21 +28,17 @@ func init() {
 	var core zapcore.Core
 
 	// 로그파일에 출력할 경우 파일과 콘솔출력
-	if s, err := strconv.ParseBool(os.Getenv("LOG_WRITE_FILE")); err == nil && s {
+	if env.GetBool("LOG_WRITE_FILE") {
 		fEncoder := zapcore.NewConsoleEncoder(cf) // NewJSONEncoder(cf)
-		logFile := os.Getenv("LOG_PATH") + "/" + os.Getenv("LOG_FILE_NAME")
-
-		duration, err := time.ParseDuration(os.Getenv("LOG_ROTATE_MAX_AGE"))
-		if err != nil {
-			log.Printf("error setup logging. %v", err)
-		}
+		logFile := env.GetString("LOG_PATH") + "/" + env.GetString("LOG_FILE_NAME")
 
 		// set logrotate
 		logf, err := rotatelogs.New(
 			logFile+"."+os.Getenv("LOG_ROTATE_PATTERN"),
-			rotatelogs.WithLinkName(logFile),       // 날짜가 없는 파일명으로 링크 생성
-			rotatelogs.WithMaxAge(duration),        // 보관일
-			rotatelogs.WithRotationTime(time.Hour)) // 시간당 로테이트 동작
+			rotatelogs.WithLinkName(logFile),                             // 날짜가 없는 파일명으로 링크 생성
+			rotatelogs.WithMaxAge(env.GetDuration("LOG_ROTATE_MAX_AGE")), // 보관일
+			rotatelogs.WithRotationTime(time.Hour),                       // 시간당 로테이트 동작
+		)
 		if err != nil {
 			log.Printf("error setup logging. %v", err)
 		}

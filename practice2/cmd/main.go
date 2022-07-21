@@ -2,27 +2,29 @@ package main
 
 import (
 	"fmt"
-	"github.com/goatking91/go-gin-study/practice2/internal/logo"
 	"log"
 	"net/http"
-	"os"
-	"time"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/goatking91/go-gin-study/practice2/internal/logo"
 	_ "github.com/goatking91/go-gin-study/practice2/pkg/config"
+	_ "github.com/goatking91/go-gin-study/practice2/pkg/db"
 	"github.com/goatking91/go-gin-study/practice2/pkg/logger"
+	"github.com/goatking91/go-gin-study/practice2/pkg/util"
 )
 
 func main() {
-	gin.SetMode(os.Getenv("SERVER_RUN_MODE"))
+	env := &util.Env{EnvSource: &util.EnvGetter{}}
+	gin.SetMode(env.GetString("SERVER_RUN_MODE"))
 
 	r := gin.Default()
 
 	logger.S.Info(logo.GenerateLogo())
 
-	endPoint := fmt.Sprintf(":%v", os.Getenv("SERVER_PORT"))
-	readTimeout, _ := time.ParseDuration(os.Getenv("SERVER_READ_TIMEOUT"))
-	writeTimeout, _ := time.ParseDuration(os.Getenv("SERVER_READ_TIMEOUT"))
+	endPoint := fmt.Sprintf(":%v", env.GetString("SERVER_PORT"))
+	readTimeout := env.GetDuration("SERVER_READ_TIMEOUT")
+	writeTimeout := env.GetDuration("SERVER_WRITE_TIMEOUT")
 
 	server := &http.Server{
 		Addr:         endPoint,
