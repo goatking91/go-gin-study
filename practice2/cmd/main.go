@@ -2,17 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/goatking91/go-gin-study/practice2/pkg/config"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/goatking91/go-gin-study/practice2/pkg/config"
 )
 
 func main() {
-	config.InitConfig()
-
 	gin.SetMode(os.Getenv("SERVER_RUN_MODE"))
 
 	r := gin.Default()

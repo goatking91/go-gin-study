@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func InitConfig() {
+func init() {
 	env := os.Getenv("ENVIRONMENT")
 	if "" == env {
 		env = "development"
