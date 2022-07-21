@@ -11,6 +11,7 @@ import (
 	_ "github.com/goatking91/go-gin-study/practice2/pkg/config"
 	_ "github.com/goatking91/go-gin-study/practice2/pkg/db"
 	"github.com/goatking91/go-gin-study/practice2/pkg/logger"
+	_ "github.com/goatking91/go-gin-study/practice2/pkg/redis"
 	"github.com/goatking91/go-gin-study/practice2/pkg/util"
 )
 
