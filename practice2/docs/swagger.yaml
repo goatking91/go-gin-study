@@ -69,6 +69,24 @@ paths:
       tags:
       - books
   /books/{uid}:
+    delete:
+      consumes:
+      - application/json
+      description: 책의 정보를 삭제하는 API입니다.
+      parameters:
+      - description: book id
+        in: path
+        name: uid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: 책 삭제
+      tags:
+      - books
     get:
       consumes:
       - application/json

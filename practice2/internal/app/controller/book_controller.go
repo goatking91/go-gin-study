@@ -16,6 +16,7 @@ type BookController interface {
 	CreateBook(*gin.Context)
 	GetBooks(*gin.Context)
 	GetBook(*gin.Context)
+	DeleteBook(*gin.Context)
 }
 
 func NewBookController(bookService service.BookService) BookController {
@@ -88,4 +89,26 @@ func (b bookController) GetBook(ctx *gin.Context) {
 	}
 
 	ctx.IndentedJSON(http.StatusOK, gin.H{"data": book})
+}
+
+// DeleteBook
+// @Summary 책 삭제
+// @Schemes
+// @Description 책의 정보를 삭제하는 API입니다.
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param uid path string true "book id"
+// @Success 204
+// @Router /books/{uid} [delete]
+func (b bookController) DeleteBook(ctx *gin.Context) {
+	uid := ctx.Param("uid")
+	book, err := b.bookService.DeleteBook(uid)
+
+	if err != nil {
+		ctx.IndentedJSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusNoContent, gin.H{"data": book})
 }
