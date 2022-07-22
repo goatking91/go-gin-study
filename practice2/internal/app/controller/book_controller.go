@@ -14,8 +14,8 @@ type bookController struct {
 
 type BookController interface {
 	CreateBook(*gin.Context)
-	GetBooks(*gin.Context)
-	GetBook(*gin.Context)
+	IndexBooks(*gin.Context)
+	ShowBook(*gin.Context)
 	DeleteBook(*gin.Context)
 	UpdateBook(*gin.Context)
 }
@@ -52,7 +52,7 @@ func (b bookController) CreateBook(ctx *gin.Context) {
 	ctx.IndentedJSON(http.StatusCreated, gin.H{"data": book})
 }
 
-// GetBooks
+// IndexBooks
 // @Summary 책 리스트
 // @Schemes
 // @Description 등록된 책의 list를 보는 API입니다.
@@ -61,7 +61,7 @@ func (b bookController) CreateBook(ctx *gin.Context) {
 // @Produce json
 // @Success 200 {object} []model.Book
 // @Router /books [get]
-func (b bookController) GetBooks(ctx *gin.Context) {
+func (b bookController) IndexBooks(ctx *gin.Context) {
 	books, err := b.bookService.GetBooks()
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
@@ -71,7 +71,7 @@ func (b bookController) GetBooks(ctx *gin.Context) {
 	ctx.IndentedJSON(http.StatusOK, gin.H{"data": books})
 }
 
-// GetBook
+// ShowBook
 // @Summary 책 상세 조회
 // @Schemes
 // @Description 책의 정보를 상세하게 보는 API입니다.
@@ -81,7 +81,7 @@ func (b bookController) GetBooks(ctx *gin.Context) {
 // @Param uid path string true "book id"
 // @Success 200 {object} model.Book
 // @Router /books/{uid} [get]
-func (b bookController) GetBook(ctx *gin.Context) {
+func (b bookController) ShowBook(ctx *gin.Context) {
 	uid := ctx.Param("uid")
 	book, err := b.bookService.GetBook(uid)
 	if err != nil {

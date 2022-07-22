@@ -18,7 +18,8 @@ var (
 	DB *gorm.DB
 )
 
-func InitDb() {
+func InitDb() (ok bool) {
+	ok = true
 	env := &util.Env{EnvSource: &util.EnvGetter{}}
 	logger.S.Info("Connecting Database Server ....")
 
@@ -42,6 +43,8 @@ func InitDb() {
 
 	if err != nil {
 		logger.S.Errorf("Database connect fail. %v", err)
+		ok = false
+		return
 	} else {
 		logger.S.Info("Database connected")
 	}
@@ -63,6 +66,7 @@ func InitDb() {
 
 	// test database
 	testDatabase()
+	return
 }
 
 func testDatabase() {

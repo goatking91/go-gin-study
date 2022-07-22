@@ -7,12 +7,12 @@ import (
 
 func init() {
 	env := os.Getenv("ENVIRONMENT")
-	if "" == env {
+	if env == "" {
 		env = "development"
 	}
 
 	_ = godotenv.Load("./pkg/env/.env." + env + ".local")
-	if "test" != env {
+	if env != "test" {
 		_ = godotenv.Load("./pkg/env/.env.local")
 	}
 	_ = godotenv.Load("./pkg/env/.env." + env)

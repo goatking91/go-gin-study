@@ -2,9 +2,11 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
+	"log"
+
 	"github.com/goatking91/go-gin-study/practice/internal/books"
 	"github.com/goatking91/go-gin-study/practice/pkg/db"
-	"github.com/spf13/viper"
 )
 
 func main() {
@@ -15,7 +17,10 @@ func main() {
 	dbUrl := viper.Get("DB_URL").(string)
 
 	r := gin.Default()
-	h := db.Init(dbUrl)
+	h, err := db.Init(dbUrl)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	books.RegisterRoutes(r, h)
 

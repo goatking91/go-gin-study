@@ -5,7 +5,8 @@ import (
 	"github.com/goatking91/go-gin-study/practice2/pkg/logger"
 )
 
-func InitMigrate() {
+func InitMigrate() (ok bool) {
+	ok = true
 	currentDataBase := DB.Migrator().CurrentDatabase()
 
 	logger.S.Infof("Running auto migrate database name:%s", currentDataBase)
@@ -16,7 +17,10 @@ func InitMigrate() {
 
 	if err != nil {
 		logger.S.Errorf("Fail auto migrate database name:%s. %v", currentDataBase, err)
+		ok = false
+		return
 	} else {
 		logger.S.Infof("Finished auto migrate database name:%s", currentDataBase)
 	}
+	return
 }

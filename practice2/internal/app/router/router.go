@@ -30,8 +30,8 @@ func createRoutes(r *gin.Engine) {
 	v1.GET("/ping", controller.Ping)
 
 	v1.POST("/books", bookController.CreateBook)
-	v1.GET("/books", bookController.GetBooks)
-	v1.GET("/books/:uid", bookController.GetBook)
+	v1.GET("/books", bookController.IndexBooks)
+	v1.GET("/books/:uid", bookController.ShowBook)
 	v1.DELETE("/books/:uid", bookController.DeleteBook)
 	v1.PUT("/books/:uid", bookController.UpdateBook)
 

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -14,15 +15,13 @@ import (
 	"github.com/goatking91/go-gin-study/practice2/pkg/db"
 	"github.com/goatking91/go-gin-study/practice2/pkg/logger"
 	"github.com/goatking91/go-gin-study/practice2/pkg/redis"
-	_ "github.com/goatking91/go-gin-study/practice2/pkg/redis"
 	"github.com/goatking91/go-gin-study/practice2/pkg/util"
 )
 
 func init() {
-	logger.InitLogger()
-	db.InitDb()
-	db.InitMigrate()
-	redis.InitRedis()
+	if !logger.InitLogger() || !db.InitDb() || !db.InitMigrate() || !redis.InitRedis() {
+		os.Exit(1)
+	}
 }
 
 // @title Practice2 API

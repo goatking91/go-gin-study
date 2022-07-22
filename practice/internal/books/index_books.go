@@ -4,10 +4,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/goatking91/go-gin-study/practice/pkg/models"
 )
 
-func (h handler) GetBooks(c *gin.Context) {
+func (h handler) IndexBooks(c *gin.Context) {
 	var books []models.Book
 
 	if result := h.DB.Find(&books); result.Error != nil {

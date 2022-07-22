@@ -17,7 +17,8 @@ var (
 	L *zap.Logger        // zap logger
 )
 
-func InitLogger() {
+func InitLogger() (ok bool) {
+	ok = true
 	env := &util.Env{EnvSource: &util.EnvGetter{}}
 	logLevel := parseLevel(env.GetString("LOG_LEVEL"))
 
@@ -41,6 +42,8 @@ func InitLogger() {
 		)
 		if err != nil {
 			log.Printf("error setup logging. %v", err)
+			ok = false
+			return
 		}
 
 		fWriter := zapcore.AddSync(logf)
@@ -58,6 +61,7 @@ func InitLogger() {
 
 	L = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
 	S = L.Sugar()
+	return
 }
 
 func parseLevel(lvl string) zapcore.Level {

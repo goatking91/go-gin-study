@@ -15,7 +15,8 @@ var (
 	Redis *redis.Client
 )
 
-func InitRedis() {
+func InitRedis() (ok bool) {
+	ok = true
 	env := &util.Env{EnvSource: &util.EnvGetter{}}
 	logger.S.Info("Connecting Redis Server ...")
 
@@ -31,11 +32,14 @@ func InitRedis() {
 	})
 
 	if _, err := Ping(); err != nil {
-		logger.S.Fatalf("Fail connect to redis server. %v", err)
+		logger.S.Errorf("Fail connect to redis server. %v", err)
+		ok = false
+		return
 	}
 
 	//test redis
 	testKeyValue()
+	return
 }
 
 func Ping() (string, error) {

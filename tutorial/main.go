@@ -33,8 +33,8 @@ var albums = []album{
 	},
 }
 
-// getAlbums responds with the list of all albums as JSON.
-func getAlbums(c *gin.Context) {
+// indexAlbums responds with the list of all albums as JSON.
+func indexAlbums(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, albums)
 }
 
@@ -53,9 +53,9 @@ func postAlbums(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newAlbum)
 }
 
-// getAlbumById locateds the album whose ID value matches the id
+// showAlbum locateds the album whose ID value matches the id
 // parameter sent by the client, then returns that album ad a response.
-func getAlbumById(c *gin.Context) {
+func showAlbum(c *gin.Context) {
 	id := c.Param("id")
 
 	// Loop over the list of albums, looking for
@@ -71,8 +71,8 @@ func getAlbumById(c *gin.Context) {
 
 func main() {
 	router := gin.Default()
-	router.GET("/albums", getAlbums)
-	router.GET("/albums/:id", getAlbumById)
+	router.GET("/albums", indexAlbums)
+	router.GET("/albums/:id", showAlbum)
 	router.POST("/albums", postAlbums)
 
 	router.Run("localhost:8080")
