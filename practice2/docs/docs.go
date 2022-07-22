@@ -16,6 +16,64 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/books": {
+            "get": {
+                "description": "등록된 책의 list를 보는 API입니다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "책 리스트",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Book"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "책을 추가하는 API입니다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "책 추가",
+                "parameters": [
+                    {
+                        "description": "The input book struct",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Book"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Book"
+                        }
+                    }
+                }
+            }
+        },
         "/ping": {
             "get": {
                 "description": "헬스체크를 위한 ping입니다.",
@@ -26,7 +84,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    ""
+                    "ping"
                 ],
                 "summary": "ping",
                 "responses": {
@@ -54,6 +112,29 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "uri": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Book": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "string"
+                },
+                "updatedAt": {
                     "type": "string"
                 }
             }

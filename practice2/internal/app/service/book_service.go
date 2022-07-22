@@ -13,15 +13,22 @@ type bookService struct {
 }
 
 type BookService interface {
-	Create(book model.Book) (model.Book, error)
+	CreateBook(book model.Book) (model.Book, error)
+	GetBooks() ([]model.Book, error)
 }
 
 func NewBookService(db *gorm.DB) BookService {
 	return bookService{db: db}
 }
 
-func (b bookService) Create(book model.Book) (model.Book, error) {
+func (b bookService) CreateBook(book model.Book) (model.Book, error) {
 	book.UID = uuid.New().String()
 	err := db.DB.Create(&book).Error
 	return book, err
+}
+
+func (b bookService) GetBooks() ([]model.Book, error) {
+	var books []model.Book
+	result := db.DB.Find(&books)
+	return books, result.Error
 }

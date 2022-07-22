@@ -29,6 +29,8 @@ func createRoutes(r *gin.Engine) {
 
 	v1.GET("/ping", controller.Ping)
 
+	v1.POST("/books", bookController.CreateBook)
+	v1.GET("/books", bookController.GetBooks)
+
 	v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	v1.POST("/books", bookController.Create)
 }

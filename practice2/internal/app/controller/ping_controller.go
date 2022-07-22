@@ -18,7 +18,7 @@ type pong struct {
 // @Summary ping
 // @Schemes
 // @Description 헬스체크를 위한 ping입니다.
-// @Tags
+// @Tags ping
 // @Accept json
 // @Produce json
 // @Success 200 {object} pong

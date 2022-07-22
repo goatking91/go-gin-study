@@ -10,11 +10,64 @@ definitions:
       uri:
         type: string
     type: object
+  model.Book:
+    properties:
+      author:
+        type: string
+      createdAt:
+        type: string
+      description:
+        type: string
+      title:
+        type: string
+      uid:
+        type: string
+      updatedAt:
+        type: string
+    type: object
 info:
   contact: {}
   title: Practice2 API
   version: "1.0"
 paths:
+  /books:
+    get:
+      consumes:
+      - application/json
+      description: 등록된 책의 list를 보는 API입니다.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Book'
+            type: array
+      summary: 책 리스트
+      tags:
+      - books
+    post:
+      consumes:
+      - application/json
+      description: 책을 추가하는 API입니다.
+      parameters:
+      - description: The input book struct
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.Book'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Book'
+      summary: 책 추가
+      tags:
+      - books
   /ping:
     get:
       consumes:
@@ -29,5 +82,5 @@ paths:
             $ref: '#/definitions/controller.pong'
       summary: ping
       tags:
-      - ""
+      - ping
 swagger: "2.0"
