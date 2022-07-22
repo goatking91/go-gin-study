@@ -17,6 +17,7 @@ type BookController interface {
 	GetBooks(*gin.Context)
 	GetBook(*gin.Context)
 	DeleteBook(*gin.Context)
+	UpdateBook(*gin.Context)
 }
 
 func NewBookController(bookService service.BookService) BookController {
@@ -111,4 +112,33 @@ func (b bookController) DeleteBook(ctx *gin.Context) {
 	}
 
 	ctx.IndentedJSON(http.StatusNoContent, gin.H{"data": book})
+}
+
+// UpdateBook
+// @Summary 책 업데이트
+// @Schemes
+// @Description 책의 정보를 수정하는 API입니다.
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param uid path string true "book id"
+// @Param data body model.Book true "The input book struct"
+// @Success 200 {object} model.Book
+// @Router /books/{uid} [put]
+func (b bookController) UpdateBook(ctx *gin.Context) {
+	uid := ctx.Param("uid")
+	var body model.Book
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	book, err := b.bookService.UpdateBook(uid, body)
+
+	if err != nil {
+		ctx.IndentedJSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, gin.H{"data": book})
 }

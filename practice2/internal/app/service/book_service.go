@@ -17,6 +17,7 @@ type BookService interface {
 	GetBooks() ([]model.Book, error)
 	GetBook(uid string) (model.Book, error)
 	DeleteBook(uid string) (model.Book, error)
+	UpdateBook(uid string, body model.Book) (book model.Book, err error)
 }
 
 func NewBookService(db *gorm.DB) BookService {
@@ -51,4 +52,20 @@ func (b bookService) DeleteBook(uid string) (model.Book, error) {
 
 	result = db.DB.Delete(&book)
 	return book, result.Error
+}
+
+func (b bookService) UpdateBook(uid string, body model.Book) (book model.Book, err error) {
+	result := db.DB.Where("uid = ?", uid).First(&book)
+
+	if result.Error != nil {
+		return book, result.Error
+	}
+
+	book.Title = body.Title
+	book.Author = body.Author
+	book.Description = body.Description
+
+	result = db.DB.Save(&book)
+	err = result.Error
+	return
 }

@@ -33,6 +33,7 @@ func createRoutes(r *gin.Engine) {
 	v1.GET("/books", bookController.GetBooks)
 	v1.GET("/books/:uid", bookController.GetBook)
 	v1.DELETE("/books/:uid", bookController.DeleteBook)
+	v1.PUT("/books/:uid", bookController.UpdateBook)
 
 	v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
