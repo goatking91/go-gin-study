@@ -31,6 +31,7 @@ func createRoutes(r *gin.Engine) {
 
 	v1.POST("/books", bookController.CreateBook)
 	v1.GET("/books", bookController.GetBooks)
+	v1.GET("/books/:uid", bookController.GetBook)
 
 	v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
