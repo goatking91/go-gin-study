@@ -102,6 +102,6 @@ func (e *Env) GetDurationWithDefault(name string, value time.Duration) time.Dura
 
 type EnvGetter struct{}
 
-func (_ *EnvGetter) GetString(name string) string {
+func (*EnvGetter) GetString(name string) string {
 	return os.Getenv(name)
 }
