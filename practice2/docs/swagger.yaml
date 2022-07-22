@@ -68,6 +68,27 @@ paths:
       summary: 책 추가
       tags:
       - books
+  /books/{uid}:
+    get:
+      consumes:
+      - application/json
+      description: 책의 정보를 상세하게 보는 API입니다.
+      parameters:
+      - description: book id
+        in: path
+        name: uid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Book'
+      summary: 책 상세 조회
+      tags:
+      - books
   /ping:
     get:
       consumes:

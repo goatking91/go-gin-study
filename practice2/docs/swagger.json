@@ -64,6 +64,38 @@
                 }
             }
         },
+        "/books/{uid}": {
+            "get": {
+                "description": "책의 정보를 상세하게 보는 API입니다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "책 상세 조회",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "book id",
+                        "name": "uid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Book"
+                        }
+                    }
+                }
+            }
+        },
         "/ping": {
             "get": {
                 "description": "헬스체크를 위한 ping입니다.",

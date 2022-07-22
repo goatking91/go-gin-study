@@ -76,8 +76,9 @@ func (b bookController) GetBooks(ctx *gin.Context) {
 // @Tags books
 // @Accept json
 // @Produce json
+// @Param uid path string true "book id"
 // @Success 200 {object} model.Book
-// @Router /books/:uid [get]
+// @Router /books/{uid} [get]
 func (b bookController) GetBook(ctx *gin.Context) {
 	uid := ctx.Param("uid")
 	book, err := b.bookService.GetBook(uid)
