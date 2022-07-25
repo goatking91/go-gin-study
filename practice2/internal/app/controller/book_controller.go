@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 
+	"github.com/goatking91/go-gin-study/practice2/internal/app/api"
 	"github.com/goatking91/go-gin-study/practice2/internal/app/model"
 	"github.com/goatking91/go-gin-study/practice2/internal/app/service"
 )
@@ -38,18 +39,19 @@ func NewBookController(bookService service.BookService) BookController {
 // @Router /books [post]
 func (b bookController) CreateBook(ctx *gin.Context) {
 	var book model.Book
-	if err := ctx.BindJSON(&book); err != nil {
-		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+
+	if err := ctx.ShouldBindJSON(&book); err != nil {
+		_ = ctx.Error(err)
 		return
 	}
 
 	book, err := b.bookService.CreateBook(book)
 	if err != nil {
-		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+		_ = ctx.Error(err)
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusCreated, gin.H{"data": book})
+	api.Response(ctx, http.StatusCreated, book)
 }
 
 // IndexBooks
@@ -85,7 +87,7 @@ func (b bookController) ShowBook(ctx *gin.Context) {
 	uid := ctx.Param("uid")
 	book, err := b.bookService.GetBook(uid)
 	if err != nil {
-		ctx.IndentedJSON(http.StatusNotFound, gin.H{"error": err})
+		_ = ctx.Error(err)
 		return
 	}
 
@@ -140,5 +142,5 @@ func (b bookController) UpdateBook(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{"data": book})
+	ctx.Set("Data", book)
 }

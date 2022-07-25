@@ -24,8 +24,15 @@ func NewBookService(db *gorm.DB) BookService {
 }
 
 func (b bookService) CreateBook(book model.Book) (model.Book, error) {
-	book.UID = uuid.New().String()
-	err := b.db.Create(&book).Error
+	err := b.db.Transaction(func(tx *gorm.DB) error {
+		book.UID = uuid.New().String()
+		err := tx.Create(&book).Error
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+
 	return book, err
 }
 
