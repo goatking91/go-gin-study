@@ -5,6 +5,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
+	"github.com/goatking91/go-gin-study/practice2/internal/app/api"
 	"github.com/goatking91/go-gin-study/practice2/internal/app/controller"
 	"github.com/goatking91/go-gin-study/practice2/internal/app/middleware"
 	"github.com/goatking91/go-gin-study/practice2/internal/app/service"
@@ -21,8 +22,8 @@ func InitRouter() *gin.Engine {
 	r.Use(middleware.HttpLogger())
 	r.Use(middleware.Error())
 
-	//r.NoMethod(middleware.Error())
-	//r.NoRoute()
+	r.NoMethod(middleware.CustomResponse(api.ErrorNoMethod))
+	r.NoRoute(middleware.CustomResponse(api.ErrorNotFoundUrl))
 
 	createRoutes(r)
 

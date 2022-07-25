@@ -35,7 +35,8 @@ func NewBookController(bookService service.BookService) BookController {
 // @Accept json
 // @Produce json
 // @Param data body model.Book true "The input book struct"
-// @Success 200 {object} model.Book
+// @Success 201 {object} api.SuccessRes{data=model.Book}
+// @Failure 400 {object} api.ErrorRes{error=api.Err}
 // @Router /books [post]
 func (b bookController) CreateBook(ctx *gin.Context) {
 	var book model.Book
@@ -61,16 +62,22 @@ func (b bookController) CreateBook(ctx *gin.Context) {
 // @Tags books
 // @Accept json
 // @Produce json
-// @Success 200 {object} []model.Book
+// @Success 200 {object} api.SuccessRes{data=api.Pagination{items=[]model.Book}}
 // @Router /books [get]
 func (b bookController) IndexBooks(ctx *gin.Context) {
-	books, err := b.bookService.GetBooks()
+	p := api.PaginationFromRequest(ctx)
+	books, err := b.bookService.GetBooks(p)
 	if err != nil {
-		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+		_ = ctx.Error(err)
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{"data": books})
+	data := api.DataWithPagination{
+		Pagination: p,
+		Items:      books,
+	}
+
+	api.Response(ctx, http.StatusOK, data)
 }
 
 // ShowBook
@@ -81,7 +88,8 @@ func (b bookController) IndexBooks(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param uid path string true "book id"
-// @Success 200 {object} model.Book
+// @Success 200 {object} api.SuccessRes{data=model.Book}
+// @Failure 404 {object} api.ErrorRes{error=api.Err}
 // @Router /books/{uid} [get]
 func (b bookController) ShowBook(ctx *gin.Context) {
 	uid := ctx.Param("uid")
@@ -91,7 +99,7 @@ func (b bookController) ShowBook(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{"data": book})
+	api.Response(ctx, http.StatusOK, book)
 }
 
 // DeleteBook
@@ -103,17 +111,18 @@ func (b bookController) ShowBook(ctx *gin.Context) {
 // @Produce json
 // @Param uid path string true "book id"
 // @Success 204
+// @Failure 404 {object} api.ErrorRes{error=api.Err}
 // @Router /books/{uid} [delete]
 func (b bookController) DeleteBook(ctx *gin.Context) {
 	uid := ctx.Param("uid")
 	book, err := b.bookService.DeleteBook(uid)
 
 	if err != nil {
-		ctx.IndentedJSON(http.StatusNotFound, gin.H{"error": err})
+		_ = ctx.Error(err)
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusNoContent, gin.H{"data": book})
+	api.Response(ctx, http.StatusNoContent, book)
 }
 
 // UpdateBook
@@ -125,22 +134,24 @@ func (b bookController) DeleteBook(ctx *gin.Context) {
 // @Produce json
 // @Param uid path string true "book id"
 // @Param data body model.Book true "The input book struct"
-// @Success 200 {object} model.Book
+// @Success 200 {object} api.SuccessRes{data=model.Book}
+// @Failure 400 {object} api.ErrorRes{error=api.Err}
+// @Failure 404 {object} api.ErrorRes{error=api.Err}
 // @Router /books/{uid} [put]
 func (b bookController) UpdateBook(ctx *gin.Context) {
 	uid := ctx.Param("uid")
 	var body model.Book
-	if err := ctx.BindJSON(&body); err != nil {
-		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+		_ = ctx.Error(err)
 		return
 	}
 
 	book, err := b.bookService.UpdateBook(uid, body)
 
 	if err != nil {
-		ctx.IndentedJSON(http.StatusNotFound, gin.H{"error": err})
+		_ = ctx.Error(err)
 		return
 	}
 
-	ctx.Set("Data", book)
+	api.Response(ctx, http.StatusOK, book)
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
+	"github.com/goatking91/go-gin-study/practice2/internal/app/api"
 	"github.com/goatking91/go-gin-study/practice2/internal/app/model"
 )
 
@@ -13,7 +14,7 @@ type bookService struct {
 
 type BookService interface {
 	CreateBook(book model.Book) (model.Book, error)
-	GetBooks() ([]model.Book, error)
+	GetBooks(p *api.Pagination) ([]model.Book, error)
 	GetBook(uid string) (model.Book, error)
 	DeleteBook(uid string) (model.Book, error)
 	UpdateBook(uid string, body model.Book) (book model.Book, err error)
@@ -36,9 +37,12 @@ func (b bookService) CreateBook(book model.Book) (model.Book, error) {
 	return book, err
 }
 
-func (b bookService) GetBooks() ([]model.Book, error) {
+func (b bookService) GetBooks(p *api.Pagination) ([]model.Book, error) {
 	var books []model.Book
-	result := b.db.Find(&books)
+	var count int64
+	b.db.Find(&books).Count(&count)
+	p.Calc(count)
+	result := b.db.Offset(p.Offset).Limit(p.Size).Find(&books)
 	return books, result.Error
 }
 
@@ -66,8 +70,9 @@ func (b bookService) UpdateBook(uid string, body model.Book) (book model.Book, e
 	if result.Error != nil {
 		return book, result.Error
 	}
-
-	book.Title = body.Title
+	if body.Title != nil {
+		book.Title = body.Title
+	}
 	book.Author = body.Author
 	book.Description = body.Description
 

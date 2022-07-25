@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	glogger "gorm.io/gorm/logger"
 	"time"
 
 	"github.com/goatking91/go-gin-study/practice2/pkg/logger"
@@ -39,6 +40,7 @@ func InitDb() (ok bool) {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		PrepareStmt:            true,
 		SkipDefaultTransaction: true,
+		Logger:                 glogger.Default.LogMode(glogger.Info),
 	})
 
 	if err != nil {
